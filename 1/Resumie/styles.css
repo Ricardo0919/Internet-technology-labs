@@ -426,3 +426,68 @@ footer {
   color: #888;
 }
 
+/* ====== Tablet y abajo (<= 1024px) ====== */
+@media (max-width: 1024px) {
+  /* Header en una sola columna y centrado real */
+  header {
+    grid-template-columns: 1fr;
+    padding: 3rem 1.25rem;       /* reduce padding lateral */
+    text-align: center;
+    justify-items: center;       /* centra la grid cell */
+  }
+  .header-left {
+    align-items: center;         /* centra los hijos (nombre, tags, summary, icons) */
+  }
+  .titles {                      /* centra los chips */
+    justify-content: center;
+  }
+  .summary {                     /* misma anchura pero centrada */
+    max-width: 38ch;
+    margin: 0 auto;
+  }
+  .social-icons {                /* íconos 100% centrados */
+    justify-content: center;
+  }
+  .header-right {                /* foto arriba */
+    order: -1;
+    margin-bottom: 1.5rem;
+  }
+  .profile-photo {               /* foto un poco más chica en mobile */
+    width: 260px;
+    height: 260px;
+  }
+
+  /* Main y secciones con márgenes/paddings más compactos y centrados */
+  main { padding: 2rem 1rem; }   /* reduce padding lateral del main */
+
+  .edu-exp-container,
+  .lang-proj-container {
+    grid-template-columns: 1fr;  /* apilar columnas */
+    gap: 2rem;
+    margin: 2rem 1rem;           /* reduce márgenes laterales */
+  }
+
+  #skills { margin: 3rem 1rem; }
+  .skills-container { grid-template-columns: 1fr; gap: 1.5rem; }
+
+  footer { padding: 2rem 1rem; }
+  .footer-top { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+}
+
+/* ====== Teléfono (<= 640px) ajustes finos ====== */
+@media (max-width: 640px) {
+  header h1 { font-size: 2rem; }
+  section h2 { font-size: 1.4rem; }
+  .tag { font-size: 0.8rem; }
+  .summary { font-size: 0.95rem; }
+
+  .job header {                  /* encabezado de experiencia sin “apretarse” */
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0.8rem 1rem;
+  }
+  .job header h3,
+  .job header p { padding: 0.4rem 0; }
+
+  .toggle-btn { top: 0.6rem; left: 0.6rem; }
+}
