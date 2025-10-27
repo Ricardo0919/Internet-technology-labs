@@ -148,7 +148,7 @@ section h2 {
 }
 
 /* ==== Experience Section ==== */
-#experience h2 {
+#experience-title {
   margin-bottom: 1rem;
 }
 
@@ -494,7 +494,7 @@ footer {
   .job header {
     flex-direction: column;
     align-items: flex-start;
-    padding: 0.8rem 6rem;
+    padding: 0.8rem 3rem;
   }
   .job header h3,
   .job header p { padding: 0.4rem 0; }
