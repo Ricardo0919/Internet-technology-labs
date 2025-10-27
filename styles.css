@@ -1,4 +1,4 @@
-/* ==== RESET ==== */
+/* ==== General Styles ==== */
 * {
   margin: 0;
   padding: 0;
@@ -12,7 +12,7 @@ body {
   line-height: 1.6;
 }
 
-/* ===== HEADER ===== */
+/* ===== About me Section ===== */
 header {
   display: grid;
   grid-template-columns: 2fr 1fr;
@@ -38,7 +38,7 @@ header h1 {
   color: #fff;
 }
 
-/* Tags under the name */
+/* Tags Student and Internship */
 .titles {
   display: flex;
   flex-wrap: wrap;
@@ -96,7 +96,7 @@ header h1 {
 }
 
 
-/* ==== MAIN CONTENT ==== */
+/* ==== Content of Main tag ==== */
 main {
   padding: 3rem 6rem;
 }
@@ -112,7 +112,7 @@ section h2 {
   letter-spacing: 1px;
 }
 
-/* ==== EDUCATION ==== */
+/* ==== Education Section ==== */
 .edu-exp-container {
   display: grid;
   grid-template-columns: 1fr 2fr;
@@ -147,7 +147,7 @@ section h2 {
   margin-bottom: 0.3rem;
 }
 
-/* ==== EXPERIENCE ==== */
+/* ==== Experience Section ==== */
 #experience h2 {
   margin-bottom: 1rem;
 }
@@ -210,7 +210,7 @@ section h2 {
 }
 
 
-/* Botón + */
+/* Button of read more (+) */
 .toggle-btn {
   background: none;
   border: none;
@@ -230,7 +230,7 @@ section h2 {
   transform: rotate(45deg);
 }
 
-/* Ocultar descripción */
+/* Hide read more styles */
 .job-details {
   max-height: 0;
   overflow: hidden;
@@ -246,7 +246,7 @@ section h2 {
 }
 
 
-/* ==== SKILLS ==== */
+/* ==== Skills Section ==== */
 #skills {
   text-align: center;
   margin: 5rem 6rem;
@@ -261,7 +261,7 @@ section h2 {
   padding-bottom: 0.3rem;
 }
 
-/* Contenedor general en dos columnas */
+/* General Container */
 .skills-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -270,7 +270,7 @@ section h2 {
   align-items: start;
 }
 
-/* Tarjetas individuales */
+/* Individual cards */
 .skill-card {
   background-color: #181818;
   border: 1px solid #333;
@@ -304,8 +304,8 @@ section h2 {
   color: #ccc;
 }
 
-/* ==== LANGUAGES + PROJECTS ==== */
-/* ===== LANGUAGES & PROJECTS SECTION ===== */
+/* ==== Languages and Projects Section ==== */
+/*General Container*/
 .lang-proj-container {
   display: grid;
   grid-template-columns: 1fr 2fr;
@@ -314,7 +314,7 @@ section h2 {
   align-items: start;
 }
 
-/* === LANGUAGES === */
+/* === Languages === */
 #languages h2 {
   font-size: 1.8rem;
   color: #fff;
@@ -332,7 +332,7 @@ section h2 {
   line-height: 1.8;
 }
 
-/* === PROJECTS === */
+/* === Projects === */
 #projects h2 {
   font-size: 1.8rem;
   color: #fff;
@@ -367,7 +367,7 @@ section h2 {
   font-size: 0.95rem;
 }
 
-/* ===== FOOTER ===== */
+/* ===== Footer - Contact Information ===== */
 footer {
   background-color: #000;
   color: #ccc;
@@ -378,7 +378,6 @@ footer {
   gap: 2rem;
 }
 
-/* Parte superior del footer */
 .footer-top {
   display: flex;
   justify-content: space-between;
@@ -386,7 +385,6 @@ footer {
   gap: 3rem;
 }
 
-/* Contact Info */
 .contact-info h3,
 .footer-links h3 {
   color: #fff;
@@ -417,7 +415,6 @@ footer {
   color: #fff;
 }
 
-/* Parte inferior centrada */
 .footer-bottom {
   text-align: center;
   border-top: 1px solid #222;
@@ -426,68 +423,83 @@ footer {
   color: #888;
 }
 
-/* ====== Tablet y abajo (<= 1024px) ====== */
+/* =========================================== Responsiveness Feature =========================================== */
+
+/* ====== Small Laptop, Tablet and below (1024px) ====== */
 @media (max-width: 1024px) {
-  /* Header en una sola columna y centrado real */
+  /* Header in one column and centered */
   header {
     grid-template-columns: 1fr;
-    padding: 3rem 1.25rem;       /* reduce padding lateral */
+    padding: 3rem 1.25rem;     
     text-align: center;
-    justify-items: center;       /* centra la grid cell */
+    justify-items: center; 
   }
   .header-left {
-    align-items: center;         /* centra los hijos (nombre, tags, summary, icons) */
+    align-items: center; 
+    order: 1;
   }
-  .titles {                      /* centra los chips */
+  .titles {
     justify-content: center;
   }
-  .summary {                     /* misma anchura pero centrada */
+  .summary {
     max-width: 38ch;
     margin: 0 auto;
   }
-  .social-icons {                /* íconos 100% centrados */
+  .social-icons {
     justify-content: center;
   }
-  .header-right {                /* foto arriba */
-    order: -1;
+  .header-right {
     margin-bottom: 1.5rem;
   }
-  .profile-photo {               /* foto un poco más chica en mobile */
+  .profile-photo {
     width: 260px;
     height: 260px;
   }
 
-  /* Main y secciones con márgenes/paddings más compactos y centrados */
-  main { padding: 2rem 1rem; }   /* reduce padding lateral del main */
-
+  /* Main and sections with compact and centered margins/paddings */
+  main { 
+    padding: 2rem 1rem; 
+  }
   .edu-exp-container,
   .lang-proj-container {
-    grid-template-columns: 1fr;  /* apilar columnas */
+    grid-template-columns: 1fr;  
     gap: 2rem;
-    margin: 2rem 1rem;           /* reduce márgenes laterales */
+    margin: 2rem 1rem;          
+  }
+  #skills { 
+    margin: 3rem 1rem; 
+  }
+  .skills-container { 
+    grid-template-columns: 1fr; gap: 1.5rem; 
   }
 
-  #skills { margin: 3rem 1rem; }
-  .skills-container { grid-template-columns: 1fr; gap: 1.5rem; }
-
-  footer { padding: 2rem 1rem; }
-  .footer-top { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+  /* Footer */
+  footer { 
+    padding: 2rem 1rem; 
+  }
+  .footer-top { 
+    flex-direction: column; 
+    align-items: flex-start; 
+    gap: 1.5rem; 
+  }
 }
 
-/* ====== Teléfono (<= 640px) ajustes finos ====== */
+/* ====== Phone and below (<= 640px) ====== */
 @media (max-width: 640px) {
   header h1 { font-size: 2rem; }
   section h2 { font-size: 1.4rem; }
   .tag { font-size: 0.8rem; }
   .summary { font-size: 0.95rem; }
 
-  .job header {                  /* encabezado de experiencia sin “apretarse” */
+  .job header {
     flex-direction: column;
     align-items: flex-start;
-    padding: 0.8rem 1rem;
+    padding: 0.8rem 6rem;
   }
   .job header h3,
   .job header p { padding: 0.4rem 0; }
 
   .toggle-btn { top: 0.6rem; left: 0.6rem; }
 }
+
+/* ======================================== End - Responsiveness Feature ======================================== */
