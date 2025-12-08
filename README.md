@@ -6,7 +6,7 @@ Link
 
 ## Resumie - (vue.js)
 Link
-</br>
+</br>[Resumie](https://ricardo-sierra-roa.netlify.app/)
 
 ## Web app
 Link
