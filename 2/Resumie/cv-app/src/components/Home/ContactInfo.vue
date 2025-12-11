@@ -10,7 +10,7 @@ const currentYear = new Date().getFullYear()
 </script>
 
 <template>
-  <footer class="bg-black">
+  <footer class="bg-black" id="footer">
     <main class="mx-10 mt-16 md:mx-20 lg:mx-40 py-10 md:py-14 text-white">
       <section class="flex flex-col gap-10 md:flex-row md:justify-between">
         <div class="w-full md:w-1/2">
