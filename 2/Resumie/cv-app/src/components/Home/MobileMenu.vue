@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { XMarkIcon, PhoneIcon } from "@heroicons/vue/24/outline";
+
 type MobileLink = { href: string; label: string };
 
 interface Props {
@@ -9,18 +10,26 @@ interface Props {
   contact: { href: string; label: string };
 }
 
+// Props drive the menu content + visibility (purely controlled by parent)
 const props = defineProps<Props>();
+
+// Emit close to keep one-way data flow (child requests close, parent updates state)
 const emit = defineEmits<{
   (e: "close"): void;
 }>();
 
+// Tracks which link is animating to prevent double navigation during transitions
 const animatingIdx = ref<number | null>(null);
 
 const navigate = (href: string, idx: number, e: MouseEvent) => {
   e.preventDefault();
+
+  // Guard: avoids multiple rapid clicks while the underline animation is running
   if (animatingIdx.value !== null) return;
 
   animatingIdx.value = idx;
+
+  // Delay navigation to let the micro-animation play (better perceived responsiveness)
   setTimeout(() => {
     emit("close");
     window.location.href = href;
@@ -29,6 +38,7 @@ const navigate = (href: string, idx: number, e: MouseEvent) => {
 };
 
 const handleKey = (href: string, idx: number, e: KeyboardEvent) => {
+  // Keyboard accessibility: allow activation via Enter / Space (button-like behavior)
   if (e.key === "Enter" || e.key === " ") {
     e.preventDefault();
     if (animatingIdx.value !== null) return;
@@ -44,6 +54,8 @@ const handleKey = (href: string, idx: number, e: KeyboardEvent) => {
 
 const handleContactClick = (e: MouseEvent) => {
   e.preventDefault();
+
+  // Small visual feedback on tap/click before closing the overlay
   const target = e.currentTarget as HTMLAnchorElement | null;
   if (target) target.classList.add("active:opacity-90");
 
@@ -69,7 +81,6 @@ const handleContactClick = (e: MouseEvent) => {
         <button
             class="absolute top-[max(1rem,env(safe-area-inset-top))] right-[max(1rem,env(safe-area-inset-right))] text-5xl md:text-6xl"
             @click="emit('close')"
-            aria-label="Cerrar menú"
         >
           <XMarkIcon class="w-10 h-10 md:w-12 md:h-12" />
         </button>
@@ -100,7 +111,6 @@ const handleContactClick = (e: MouseEvent) => {
               @click="handleContactClick"
               class="inline-flex gap-2 items-center justify-center rounded-full bg-black px-6 py-3 text-white text-base font-semibold shadow-sm
                    hover:opacity-95 active:opacity-90 transition"
-              :aria-label="props.contact.label"
           >
             <PhoneIcon class="w-4 h-4" />
             <span>{{ props.contact.label }}</span>

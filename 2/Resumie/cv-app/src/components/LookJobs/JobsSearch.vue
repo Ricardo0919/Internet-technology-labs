@@ -2,12 +2,14 @@
 import { computed, onMounted, ref, watch } from "vue";
 
 /**
- * Config
- * - Pon tu API key en .env: VITE_JOBBOERSE_API_KEY="..."
- * - Base URL: si usas proxy de Vite, puedes poner "/api/..." aquí.
+ * Recommended base:
+ * https://rest.arbeitsagentur.de/jobboerse/jobsuche-service
+ * If you use a Vite proxy, BASE_URL can also be "/api".
  */
 const BASE_URL =
-    import.meta.env.VITE_JOBBOERSE_BASE_URL ?? "https://rest.arbeitsagentur.de";
+    import.meta.env.VITE_JOBBOERSE_BASE_URL ??
+    "https://rest.arbeitsagentur.de/jobboerse/jobsuche-service";
+
 const API_KEY = import.meta.env.VITE_JOBBOERSE_API_KEY as string | undefined;
 
 type JobItem = {
@@ -32,37 +34,26 @@ type JobSearchResponse = {
   facetten?: any;
 };
 
-type JobDetails = {
-  beruf?: string;
-  arbeitgeber?: string;
-  arbeitsort?: { ort?: string; plz?: string };
-  taetigkeitsbeschreibung?: string;
-  arbeitgeberAdresse?: string;
-  veroeffentlichungsdatum?: string;
-};
-
-const keyword = ref("werkstudent"); // default que casi siempre devuelve resultados
+// default options that returns results
+const keyword = ref("werkstudent");
 const location = ref("Stuttgart");
 const radius = ref(50);
 const size = ref(8);
 
-// ✅ Pagination state
+// Pagination state
 const page = ref(1);
 const total = ref<number>(0);
 
-const totalPages = computed(() => {
-  return Math.max(1, Math.ceil((total.value || 0) / size.value));
-});
+const totalPages = computed(() =>
+    Math.max(1, Math.ceil((total.value || 0) / size.value))
+);
 
+// Request/UI state
 const loading = ref(false);
 const error = ref<string | null>(null);
 const jobs = ref<JobItem[]>([]);
 
-const selectedHashId = ref<string | null>(null);
-const detailsLoading = ref(false);
-const detailsError = ref<string | null>(null);
-const details = ref<JobDetails | null>(null);
-
+// Basic validation: location is required for a meaningful search
 const canSearch = computed(() => location.value.trim().length > 0);
 
 function buildSearchUrl() {
@@ -95,13 +86,13 @@ async function searchJobs() {
 
     const data = (await res.json()) as JobSearchResponse;
 
-    // ✅ Map correcto del response real
+    // Map API response into the list displayed by the UI
     jobs.value = data.stellenangebote ?? [];
 
-    // ✅ Para UI + paginación
+    // Total results for pagination + user feedback
     total.value = data.maxErgebnisse ?? 0;
 
-    // La API a veces regresa el page actual
+    // API may echo the current page; keep UI consistent if it does
     if (typeof data.page === "number") page.value = data.page;
   } catch (e: any) {
     error.value =
@@ -114,13 +105,13 @@ async function searchJobs() {
   }
 }
 
-// ✅ Botón Search: siempre reinicia a página 1
+// Search button: always reset to page 1
 function runSearch() {
   page.value = 1;
   searchJobs();
 }
 
-// ✅ Prev/Next
+// Prev/Next page navigation
 function nextPage() {
   if (page.value < totalPages.value) {
     page.value += 1;
@@ -135,31 +126,13 @@ function prevPage() {
   }
 }
 
-// ✅ Si cambias filtros, resetea paginación (para no quedarte en page 5 sin sentido)
+// Reset pagination when filters change (avoid landing on invalid pages)
 watch([keyword, location, radius, size], () => {
   page.value = 1;
 });
 
-function openExternal(j: JobItem) {
-  // 1) Si hay refnr, es la opción más estable
-  if (j.refnr) {
-    window.open(`https://www.arbeitsagentur.de/jobsuche/suche?angebotsart=1&refnr=${encodeURIComponent(j.refnr)}`, "_blank");
-    return;
-  }
-
-  // 2) fallback: al menos abre una búsqueda con título+ciudad
-  const q = `${j.beruf ?? ""} ${j.arbeitsort?.ort ?? ""}`.trim();
-  window.open(`https://www.arbeitsagentur.de/jobsuche/suche?angebotsart=1&wo=${encodeURIComponent(location.value)}&was=${encodeURIComponent(q)}`, "_blank");
-}
-
-function closeDetails() {
-  selectedHashId.value = null;
-  details.value = null;
-  detailsError.value = null;
-}
-
 onMounted(() => {
-  // auto-search al entrar
+  // Auto-search on first render
   searchJobs();
 });
 </script>
@@ -274,6 +247,7 @@ onMounted(() => {
         </button>
       </div>
 
+      <!-- Cards only -->
       <div class="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div
             v-for="j in jobs"
@@ -294,21 +268,16 @@ onMounted(() => {
           </p>
 
           <p class="mt-2 text-xs text-white/50">
-            <template v-if="j.veroeffentlichungsdatum">Published: {{ j.veroeffentlichungsdatum }}</template>
-            <template v-else-if="j.eintrittsdatum">Start: {{ j.eintrittsdatum }}</template>
-            <template v-else>Published: —</template>
+            <template v-if="j.veroeffentlichungsdatum">
+              Published: {{ j.veroeffentlichungsdatum }}
+            </template>
+            <template v-else-if="j.eintrittsdatum">
+              Start: {{ j.eintrittsdatum }}
+            </template>
+            <template v-else>
+              Published: —
+            </template>
           </p>
-
-          <div class="mt-4 flex gap-3">
-            <button
-                type="button"
-                class="rounded-full border border-white px-4 py-2 text-xs md:text-sm text-white
-         hover:opacity-90 active:opacity-80 transition"
-                @click="openExternal(j)"
-            >
-              Details
-            </button>
-          </div>
         </div>
       </div>
 
@@ -316,63 +285,5 @@ onMounted(() => {
         No results. Try a different keyword or city.
       </div>
     </div>
-
-    <!-- Details Modal -->
-    <Teleport to="body">
-      <div v-if="selectedHashId" class="fixed inset-0 z-[80]">
-        <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" @click="closeDetails" />
-
-        <div class="relative mx-auto mt-20 w-[92%] max-w-2xl">
-          <div class="rounded-2xl border border-neutral-700 bg-neutral-950 p-6 md:p-8">
-            <div class="flex items-start justify-between gap-4">
-              <div>
-                <h3 class="text-lg md:text-xl font-semibold text-white">Job Details</h3>
-                <p class="mt-1 text-xs text-white/50 break-all">{{ selectedHashId }}</p>
-              </div>
-
-              <button
-                  type="button"
-                  class="rounded-full border border-neutral-700 px-3 py-1 text-white/80 hover:text-white hover:border-white/60 transition"
-                  @click="closeDetails"
-              >
-                ✕
-              </button>
-            </div>
-
-            <div class="mt-6">
-              <div v-if="detailsLoading" class="text-white/70">Loading details…</div>
-
-              <div
-                  v-else-if="detailsError"
-                  class="rounded-2xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-white/80"
-              >
-                {{ detailsError }}
-              </div>
-
-              <div v-else-if="details" class="space-y-3">
-                <p class="text-white">
-                  <span class="font-semibold">Title:</span> {{ details.beruf ?? "—" }}
-                </p>
-                <p class="text-white/80">
-                  <span class="font-semibold text-white">Company:</span> {{ details.arbeitgeber ?? "—" }}
-                </p>
-                <p class="text-white/80">
-                  <span class="font-semibold text-white">Location:</span>
-                  {{ details.arbeitsort?.plz }} {{ details.arbeitsort?.ort }}
-                </p>
-
-                <div class="mt-4 rounded-2xl border border-neutral-700 bg-black/30 p-4">
-                  <p class="text-sm text-white/70">
-                    {{ details.taetigkeitsbeschreibung ?? "No description provided." }}
-                  </p>
-                </div>
-              </div>
-
-              <div v-else class="text-white/70">No details available.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </Teleport>
   </section>
 </template>

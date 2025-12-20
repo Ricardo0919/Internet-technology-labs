@@ -8,7 +8,6 @@ import Whatsapp from "../../assets/images/Home/WhatsApp/Whatsapp.png";
       :href="whatsappLink"
       target="_blank"
       rel="noopener noreferrer"
-      aria-label="Contactar por WhatsApp"
       class="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50
            w-14 h-14 md:w-16 md:h-16
            flex items-center justify-center

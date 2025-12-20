@@ -5,6 +5,7 @@ import QrcodeVue from "qrcode.vue";
 
 const resumieUrl = "https://ricardo-sierra-roa.netlify.app/";
 
+// Modal visibility state (drives v-if + transition + backdrop behavior)
 const isOpen = ref(false);
 
 const openModal = () => {
@@ -16,12 +17,14 @@ const closeModal = () => {
 };
 
 const handleKeydown = (event: KeyboardEvent) => {
+  // Accessibility/UX: allow closing the modal with Escape
   if (event.key === "Escape") {
     closeModal();
   }
 };
 
-// bloquear scroll de fondo cuando el modal está abierto
+// Prevent background scrolling while the modal is open.
+// This improves usability on mobile and keeps focus on the modal content.
 watch(isOpen, (val) => {
   if (val) {
     document.body.style.overflow = "hidden";
@@ -31,20 +34,22 @@ watch(isOpen, (val) => {
 });
 
 onMounted(() => {
+  // Global key listener is attached only while the component exists
   window.addEventListener("keydown", handleKeydown);
 });
 
 onBeforeUnmount(() => {
+  // Cleanup to avoid memory leaks + ensure scroll is restored if the component is removed
   window.removeEventListener("keydown", handleKeydown);
   document.body.style.overflow = "";
 });
 </script>
 
 <template>
+  <!-- Floating action button that opens the QR modal -->
   <button
       type="button"
       @click="openModal"
-      aria-label="Abrir QR para compartir el resumie"
       class="fixed bottom-6 left-6 md:bottom-8 md:left-8 z-40
            w-14 h-14 md:w-16 md:h-16
            flex items-center justify-center
@@ -61,18 +66,14 @@ onBeforeUnmount(() => {
     />
   </button>
 
+  <!-- Transition keeps the modal entrance/exit smooth instead of popping in/out -->
   <transition name="fade">
     <div
         v-if="isOpen"
-        class="fixed inset-0 z-50 flex items-center justify-center
-             bg-black/60 backdrop-blur-sm"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
         @click.self="closeModal"
     >
-      <div
-          class="relative w-[90%] max-w-sm md:max-w-md
-               bg-white rounded-2xl shadow-2xl
-               p-6 md:p-8 flex flex-col items-center gap-4"
-      >
+      <div class="relative w-[90%] max-w-sm md:max-w-md bg-white rounded-2xl shadow-2xl p-6 md:p-8 flex flex-col items-center gap-4">
         <button
             type="button"
             @click="closeModal"
@@ -81,7 +82,6 @@ onBeforeUnmount(() => {
                  rounded-full border border-black/10
                  text-black/70 hover:text-black hover:bg-black/5
                  transition"
-            aria-label="Cerrar"
         >
           ✕
         </button>
@@ -95,10 +95,8 @@ onBeforeUnmount(() => {
           and you’ll get the link to my online resume.
         </p>
 
-        <div
-            class="mt-2 rounded-xl border border-gray-200 p-4 md:p-5
-                 bg-gray-50 flex items-center justify-center"
-        >
+        <!-- QR generation using qrcode.vue; high error correction helps scanning reliability -->
+        <div class="mt-2 rounded-xl border border-gray-200 p-4 md:p-5 bg-gray-50 flex items-center justify-center">
           <QrcodeVue
               :value="resumieUrl"
               :size="192"

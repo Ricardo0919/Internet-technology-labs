@@ -1,46 +1,57 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import tecLogo from '../../assets/images/Home/EducationExperience/tecLogo.png'
-import plus from '../../assets/images/Home/EducationExperience/plus.webp'
+import { ref } from "vue";
+import tecLogo from "../../assets/images/Home/EducationExperience/tecLogo.png";
+import plus from "../../assets/images/Home/EducationExperience/plus.webp";
 
+// Typed model for experience entries to keep the data consistent.
 interface ExperienceItem {
-  title: string
-  location: string
-  period: string
-  description: string
+  title: string;
+  location: string;
+  period: string;
+  description: string;
 }
 
+// Data-driven rendering: the UI is generated from this array,
+// making it easy to add/remove experiences without modifying the template structure.
 const experiences: ExperienceItem[] = [
   {
-    title: 'Software Engineer Intern - PPG Industries',
-    location: 'Querétaro, MX',
-    period: 'Nov 2024 - Present',
-    description: 'Full Stack Developer Intern working on Angular, .NET, and PostgreSQL for COMEX projects.',
+    title: "Software Engineer Intern - PPG Industries",
+    location: "Querétaro, MX",
+    period: "Nov 2024 - Present",
+    description:
+        "Full Stack Developer Intern working on Angular, .NET, and PostgreSQL for COMEX projects.",
   },
   {
-    title: 'Jr Developer - Cloud Keter',
-    location: 'Querétaro, MX',
-    period: 'Feb 2024 - Sep 2024',
-    description: 'Developed full-stack web applications with React, Tailwind CSS, and TypeScript, integrating APIs and databases.',
+    title: "Jr Developer - Cloud Keter",
+    location: "Querétaro, MX",
+    period: "Feb 2024 - Sep 2024",
+    description:
+        "Developed full-stack web applications with React, Tailwind CSS, and TypeScript, integrating APIs and databases.",
   },
   {
-    title: 'AES Project - Intel',
-    location: 'Guadalajara, MX',
-    period: 'Mar 2024 - Apr 2024',
-    description: 'Implemented AES encryption/decryption on FPGA in collaboration with Tec de Monterrey and Intel.',
+    title: "AES Project - Intel",
+    location: "Guadalajara, MX",
+    period: "Mar 2024 - Apr 2024",
+    description:
+        "Implemented AES encryption/decryption on FPGA in collaboration with Tec de Monterrey and Intel.",
   },
   {
-    title: 'AI Puzzlebot - Manchester Robotics',
-    location: 'Querétaro, MX',
-    period: 'Mar 2025 - Jun 2025',
-    description: 'Developed adaptive control and YOLOv8-based vision system for an autonomous mobile robot using ROS2.',
+    title: "AI Puzzlebot - Manchester Robotics",
+    location: "Querétaro, MX",
+    period: "Mar 2025 - Jun 2025",
+    description:
+        "Developed adaptive control and YOLOv8-based vision system for an autonomous mobile robot using ROS2.",
   },
-]
+];
 
-const openIndex = ref<number | null>(null)
+// Accordion state: only one card is expanded at a time.
+// null means “all collapsed”.
+const openIndex = ref<number | null>(null);
+
 const toggleCard = (index: number) => {
-  openIndex.value = openIndex.value === index ? null : index
-}
+  // If the same card is clicked again, collapse it; otherwise open the selected card.
+  openIndex.value = openIndex.value === index ? null : index;
+};
 </script>
 
 <template>
@@ -51,6 +62,7 @@ const toggleCard = (index: number) => {
       </h2>
       <div class="mt-2 h-px w-full bg-neutral-700"></div>
 
+      <!-- Static education card: kept separate from the experience list for clarity -->
       <div class="mt-8 rounded-2xl border border-neutral-700 bg-neutral-900/40 px-8 py-10 flex flex-col items-center text-center">
         <img :src="tecLogo" alt="Tecnológico de Monterrey" class="h-20 w-auto mb-6" />
         <p class="text-lg md:text-xl font-semibold text-white">
@@ -74,6 +86,7 @@ const toggleCard = (index: number) => {
       </h2>
       <div class="mt-2 h-px w-full bg-neutral-700"></div>
 
+      <!-- Render experiences from data; title is used as key assuming it's unique -->
       <div class="mt-8 space-y-4 mb-4">
         <div v-for="(exp, index) in experiences" :key="exp.title" class="rounded-2xl border border-neutral-700 bg-neutral-900/40 px-6 pt-4 pb-2">
           <div class="flex items-center justify-between gap-4">
@@ -94,7 +107,7 @@ const toggleCard = (index: number) => {
             </p>
           </div>
 
-
+          <!-- Expand/collapse animation: max-height and opacity for a smooth accordion effect -->
           <div class="mt-2 overflow-hidden transition-all duration-300" :class="openIndex === index ? 'max-h-32 opacity-100' : 'max-h-0 opacity-0'">
             <p class="mt-2 text-sm text-white/80 pl-6">
               {{ exp.description }}

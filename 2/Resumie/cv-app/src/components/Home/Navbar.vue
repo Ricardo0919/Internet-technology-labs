@@ -4,10 +4,15 @@ import { Bars3Icon, PhoneIcon } from "@heroicons/vue/24/outline";
 import Logo from "../../assets/images/Home/Navbar/Logo.png";
 import MobileMenu from "./MobileMenu.vue";
 
+// UI state kept local to Navbar for predictable behavior:
+// - open: controls mobile overlay
+// - spinning: prevents double-tap spam while the icon animates
+// - scrolled: toggles header styling after the user scrolls
 const open = ref(false);
 const spinning = ref(false);
 const scrolled = ref(false);
 
+// Navigation config as data
 const LINKS = [
   { href: "/#home", label: "Home" },
   { href: "/#about-me", label: "Experience" },
@@ -20,11 +25,13 @@ const CONTACT = {
   label: "Contact",
 };
 
+// Scroll listener updates header visuals (glass effect) once the user leaves the top
 const handleScroll = () => {
   scrolled.value = window.scrollY > 10;
 };
 
 onMounted(() => {
+  // Attach listener only while component is mounted to avoid leaks
   window.addEventListener("scroll", handleScroll);
   handleScroll();
 });
@@ -34,7 +41,10 @@ onBeforeUnmount(() => {
 });
 
 const handleHamburgerClick = () => {
+  // Guard against multiple clicks while animating or already open
   if (spinning.value || open.value) return;
+
+  // Small delay to sync icon animation with menu opening for a smoother UX
   spinning.value = true;
   setTimeout(() => {
     open.value = true;
@@ -56,11 +66,10 @@ const handleCloseMenu = () => {
   >
     <nav
         role="navigation"
-        aria-label="Primary"
         class="flex h-16 lg:h-20 items-center justify-between px-12 md:px-20 lg:px-8"
     >
       <!-- Icon -->
-      <a href="/" aria-label="Logo" class="shrink-0">
+      <a href="/" class="shrink-0">
         <img :src="Logo" alt="Logo" class="h-6 w-auto md:h-7 lg:h-8" />
       </a>
 
@@ -82,19 +91,16 @@ const handleCloseMenu = () => {
         <a
             :href="CONTACT.href"
             class="inline-flex items-center gap-2 rounded-full border border-white px-5 py-2 text-white text-sm font-medium shadow-sm hover:opacity-90 active:opacity-80 transition"
-            :aria-label="CONTACT.label"
         >
           <PhoneIcon class="w-4 h-4" />
           <span>{{ CONTACT.label }}</span>
         </a>
       </div>
 
-      <!-- Tablet and Phone Menu button -->
+      <!-- Tablet and Mobile menu trigger -->
       <button
           class="lg:hidden p-2 -mr-2"
           @click="handleHamburgerClick"
-          aria-label="Abrir menú"
-          :aria-expanded="open"
       >
         <Bars3Icon
             class="w-7 h-7 md:w-8 md:h-8 text-white
@@ -106,6 +112,6 @@ const handleCloseMenu = () => {
     </nav>
   </header>
 
-  <!-- Tablet and Phone Menu -->
+  <!-- Tablet and Phone Menu Component-->
   <MobileMenu :open="open" :links="LINKS" :contact="CONTACT" @close="handleCloseMenu" />
 </template>
