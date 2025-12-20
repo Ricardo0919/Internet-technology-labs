@@ -1,15 +1,8 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from "vue";
 
-/**
- * Recommended base:
- * https://rest.arbeitsagentur.de/jobboerse/jobsuche-service
- * If you use a Vite proxy, BASE_URL can also be "/api".
- */
-const BASE_URL =
-    import.meta.env.VITE_JOBBOERSE_BASE_URL ??
-    "https://rest.arbeitsagentur.de/jobboerse/jobsuche-service";
-
+// Data imported from the .env file
+const BASE_URL = import.meta.env.VITE_JOBBOERSE_BASE_URL ?? "https://rest.arbeitsagentur.de/jobboerse/jobsuche-service";
 const API_KEY = import.meta.env.VITE_JOBBOERSE_API_KEY as string | undefined;
 
 type JobItem = {
