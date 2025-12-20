@@ -8,12 +8,11 @@ const open = ref(false);
 const spinning = ref(false);
 const scrolled = ref(false);
 
-// para landing, usa anchors a secciones:
 const LINKS = [
-  { href: "#home", label: "Home" },
-  { href: "#about-me", label: "Experience" },
-  { href: "#skills", label: "Skills" },
-  { href: "#languages-projects", label: "Languages, Projects & Achievements" },
+  { href: "/#home", label: "Home" },
+  { href: "/#about-me", label: "Experience" },
+  { href: "/#skills", label: "Skills" },
+  { href: "/#languages-projects", label: "Languages, Projects & Achievements" },
 ];
 
 const CONTACT = {
@@ -60,12 +59,12 @@ const handleCloseMenu = () => {
         aria-label="Primary"
         class="flex h-16 lg:h-20 items-center justify-between px-12 md:px-20 lg:px-8"
     >
-      <!-- Logo -->
-      <a href="#home" aria-label="Logo" class="shrink-0">
+      <!-- Icon -->
+      <a href="/" aria-label="Logo" class="shrink-0">
         <img :src="Logo" alt="Logo" class="h-6 w-auto md:h-7 lg:h-8" />
       </a>
 
-      <!-- Menu desktop -->
+      <!-- Desktop Menu -->
       <ul class="hidden lg:flex items-center gap-8 xl:gap-10">
         <li v-for="item in LINKS" :key="item.href">
           <a
@@ -78,7 +77,7 @@ const handleCloseMenu = () => {
         </li>
       </ul>
 
-      <!-- Botón contacto -->
+      <!-- Contact button -->
       <div class="hidden lg:flex">
         <a
             :href="CONTACT.href"
@@ -90,6 +89,7 @@ const handleCloseMenu = () => {
         </a>
       </div>
 
+      <!-- Tablet and Phone Menu button -->
       <button
           class="lg:hidden p-2 -mr-2"
           @click="handleHamburgerClick"
@@ -106,5 +106,6 @@ const handleCloseMenu = () => {
     </nav>
   </header>
 
+  <!-- Tablet and Phone Menu -->
   <MobileMenu :open="open" :links="LINKS" :contact="CONTACT" @close="handleCloseMenu" />
 </template>

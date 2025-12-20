@@ -23,7 +23,7 @@ const navigate = (href: string, idx: number, e: MouseEvent) => {
   animatingIdx.value = idx;
   setTimeout(() => {
     emit("close");
-    window.location.href = href; // navegación simple
+    window.location.href = href;
     animatingIdx.value = null;
   }, 220);
 };
@@ -55,20 +55,17 @@ const handleContactClick = (e: MouseEvent) => {
 </script>
 
 <template>
-  <Teleport to="body">
+  <div>
     <div v-if="open" class="fixed inset-0 z-[60]">
-      <!-- Overlay -->
       <div
           class="absolute inset-0 bg-white"
           @click="emit('close')"
           aria-hidden="true"
       />
 
-      <!-- Contenido -->
-      <div
-          class="relative h-full w-full flex flex-col items-center justify-center font-zendots text-black"
-      >
-        <!-- Close -->
+
+      <div class="relative h-full w-full flex flex-col items-center justify-center font-zendots text-black">
+        <!-- Close Button -->
         <button
             class="absolute top-[max(1rem,env(safe-area-inset-top))] right-[max(1rem,env(safe-area-inset-right))] text-5xl md:text-6xl"
             @click="emit('close')"
@@ -77,10 +74,8 @@ const handleContactClick = (e: MouseEvent) => {
           <XMarkIcon class="w-10 h-10 md:w-12 md:h-12" />
         </button>
 
-        <!-- Links -->
-        <nav
-            class="flex w-4/5 max-w-xs flex-col gap-6 text-center text-lg md:text-xl font-semibold"
-        >
+        <!-- Menu links -->
+        <nav class="flex w-4/5 max-w-xs flex-col gap-6 text-center text-lg md:text-xl font-semibold">
           <button
               v-for="(l, i) in props.links"
               :key="l.href"
@@ -90,6 +85,7 @@ const handleContactClick = (e: MouseEvent) => {
               @keydown="(e) => handleKey(l.href, i, e)"
           >
             {{ l.label }}
+            <!-- Underline animation bar -->
             <span
                 class="pointer-events-none absolute left-1/2 -bottom-0.5 h-[2px] w-full -translate-x-1/2 bg-black origin-center transform transition-transform duration-200"
                 :class="animatingIdx === i ? 'scale-x-100' : 'scale-x-0'"
@@ -97,7 +93,7 @@ const handleContactClick = (e: MouseEvent) => {
           </button>
         </nav>
 
-        <!-- CTA contacto -->
+        <!-- Contact Button -->
         <div class="mt-10 w-full flex justify-center px-6">
           <a
               :href="props.contact.href"
@@ -112,5 +108,5 @@ const handleContactClick = (e: MouseEvent) => {
         </div>
       </div>
     </div>
-  </Teleport>
+  </div>
 </template>

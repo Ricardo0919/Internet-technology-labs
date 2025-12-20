@@ -14,8 +14,8 @@ import Whatsapp from "../../assets/images/Home/WhatsApp/Whatsapp.png";
            flex items-center justify-center
            rounded-full border border-white
            bg-black
-            transition-transform duration-500 ease-out
-            hover:scale-110 hover:opacity-30"
+           transition-transform duration-500 ease-out
+           hover:scale-110 hover:opacity-30"
   >
     <img
         :src="Whatsapp"

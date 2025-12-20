@@ -1,9 +1,9 @@
 <script setup lang="ts">
 const links = [
-  { label: 'Home', href: '#home' },
-  { label: 'About me', href: '#about-me' },
-  { label: 'Skills', href: '#skills' },
-  { label: 'Languages, Projects & Achievements', href: '#languages-projects' },
+  { label: 'Home', href: '/#home' },
+  { label: 'About me', href: '/#about-me' },
+  { label: 'Skills', href: '/#skills' },
+  { label: 'Languages, Projects & Achievements', href: '/#languages-projects' },
 ]
 
 const currentYear = new Date().getFullYear()

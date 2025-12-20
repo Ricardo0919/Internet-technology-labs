@@ -63,7 +63,7 @@ const toggleCard = (index: number) => {
           August 2022 – Present
         </p>
         <p class="mt-1 text-xs md:text-sm text-white/70">
-          GPA: 98.14 / 100
+          GPA: 98.17 / 100
         </p>
       </div>
     </div>
@@ -97,9 +97,7 @@ const toggleCard = (index: number) => {
 
           <div class="mt-2 overflow-hidden transition-all duration-300" :class="openIndex === index ? 'max-h-32 opacity-100' : 'max-h-0 opacity-0'">
             <p class="mt-2 text-sm text-white/80 pl-6">
-              <li>
-                <ol>{{ exp.description }}</ol>
-              </li>
+              {{ exp.description }}
             </p>
           </div>
 

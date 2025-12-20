@@ -51,7 +51,7 @@ onBeforeUnmount(() => {
            rounded-full border border-white
            bg-black
            shadow-lg shadow-black/40
-           transition-transform transition-opacity duration-300 ease-out
+           transition-transform duration-300 ease-out
            hover:scale-110 hover:opacity-60 active:scale-95"
   >
     <img
