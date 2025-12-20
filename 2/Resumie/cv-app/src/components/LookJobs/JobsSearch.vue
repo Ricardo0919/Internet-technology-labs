@@ -213,7 +213,7 @@ onMounted(() => {
         <h2 class="text-lg md:text-xl font-semibold text-white">Results</h2>
 
         <p class="text-xs md:text-sm text-white/60">
-          {{ jobs.length }} jobs • total: {{ total }} • page {{ page }} / {{ totalPages }}
+          {{ jobs.length }} jobs - total: {{ total }} - page {{ page }} / {{ totalPages }}
         </p>
       </div>
 
