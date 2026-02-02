@@ -3,12 +3,13 @@ import type { Game } from "../types/ticTac";
 import { API_BASE_URL } from "../api/client";
 
 function toWsBase(httpBase: string) {
-    // http://localhost:8080 -> ws://localhost:8080
-    // https://... -> wss://...
+    // Si estás usando proxy (BASE = /api), el WS va por /ws
+    if (httpBase === "/api") return "/ws";
     if (httpBase.startsWith("https://")) return httpBase.replace("https://", "wss://");
     if (httpBase.startsWith("http://")) return httpBase.replace("http://", "ws://");
     return httpBase;
 }
+
 
 export function useGameSocket(opts: {
     gameId: string;

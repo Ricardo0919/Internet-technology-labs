@@ -1,4 +1,5 @@
-const BASE = import.meta.env.VITE_API_BASE_URL as string;
+const BASE = (import.meta.env.VITE_API_BASE_URL as string) || "/api";
+// /api sirve si usas proxy de Vite. Si no, pon el full URL en .env
 
 function buildHeaders(extra?: HeadersInit): HeadersInit {
     const playerId = localStorage.getItem("playerId");
@@ -20,7 +21,6 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
         throw new Error(text || `${res.status} ${res.statusText}`);
     }
 
-    // mayoría responde JSON
     return res.json() as Promise<T>;
 }
 
